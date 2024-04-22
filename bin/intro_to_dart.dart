@@ -1,65 +1,71 @@
-void main(List<String> args) {
+void main() {
+  Human person = Human(
+      name: "Noor", color: "white", isDead: false, length: 180, weight: 70);
 
+  person.name = "Hala";
 
-  Set product = {30,20,50};
-  product.add(3);
-  print(product);
+  print(person.name);
+  person.printInforamtion();
+  String status = person.getStatus();
+  print(status);
 
-
-  Map<String, Map> nestedMap = {
-    "address": {
-      "street": "Kulas Light",
-      "suite": "Apt. 556",
-      "city": "Gwenborough",
-      "zipcode": "92998-3874",
-      "geo": {
-        "lat": "-37.3159",
-        "lng": "81.1496",
-      }
-    },
-  };
-  print(nestedMap['address']!['geo']['lng']);
-  print(nestedMap.values.elementAt(0).values.elementAt(4).values.elementAt(1));
-
-  int counter = 0;
-  print(counter);
-
-  List<num> names = [30, 2.5, -3.6];
-  names.add(40);
-  names.shuffle();
-  print(names);
-
-  Map<String, num> marks = {"Math 3": 60, "Physics": 100, "E": 90};
-  print(marks.keys.elementAt(0));
-  print(marks.values.elementAt(2));
-
-  List<Map<String, num>> MapOnList = [
-    {
-      "Hello": 40,
-      "There": 90,
-      "Facebook": 70,
-    },
-    {
-      "Now": 80,
-      "A": 100,
-      "Dayes": 30,
-    }
-  ];
-
-  print(MapOnList.elementAt(0).keys.elementAt(2));
-  print(MapOnList.elementAt(1)['A']);
-  var temp = 37;
-  // const age;
-  // age = 20;
-
-  final age;
-  age = 20;
-  var result = addValues(30, secondNumber: 30, thirdNumber: 50);
-  print(result);
+  Employee accountant = Employee(
+      workPosition: "account",
+      name: "Sami",
+      color: "white",
+      weight: 80,
+      isDead: true,
+      length: 180);
+  accountant.printer();
 }
 
-int addValues(int firstNumber,
-    {int secondNumber = 0, required int thirdNumber}) {
-  int offsetNumber = 30;
-  return firstNumber + secondNumber + thirdNumber + offsetNumber;
+class Human {
+  String name;
+  String color;
+  num length;
+  num weight;
+  bool isDead;
+
+  Human(
+      {required this.name,
+      required this.color,
+      required this.isDead,
+      required this.length,
+      required this.weight});
+
+  printInforamtion() {
+    print(this.name +
+        " " +
+        this.color +
+        " " +
+        this.isDead.toString() +
+        " " +
+        this.length.toString() +
+        " " +
+        this.weight.toString());
+  }
+
+  String getStatus() {
+    if (this.isDead) {
+      return "Sorry , That person is Dead";
+    } else {
+      return "Yes , That person is a Live";
+    }
+  }
+}
+
+class Employee extends Human {
+  String workPosition;
+  Employee(
+      {required this.workPosition,
+      required super.name,
+      required super.color,
+      required super.weight,
+      required super.isDead,
+      required super.length});
+
+  printer() {
+    super.printInforamtion();
+    print(this.workPosition);
+  }
 }
