@@ -1,150 +1,109 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
 
-// Future<String> data = "Hello";
+import 'package:dio/dio.dart';
 
-Future<String> getData(Function onTap) async {
-  await Future.delayed(Duration(seconds: 10));
-  onTap("E-t");
-  return 'Hello';
+main() async {
+  await getHttp();
+  await getListOfData();
 }
 
-void main() async {
-  Squere first = Squere(demision: 15);
-  Squere second = first;
+Dio dio = Dio();
 
-  Function printer = (String name) => print(name);
-  print(printer.toString());
-
-  Future<String> temp = getData(printer);
-
-  // printer('E-T');
-
-  if (first == second) {
-    print("Yes");
+getHttp() async {
+  Response response =
+      await dio.get("https://jsonplaceholder.typicode.com/todos/1");
+  if (response.statusCode == 200) {
+    // Todos todo = Todos(
+    //     userId: response.data['userId'],
+    //     id: response.data['id'],
+    //     title: response.data['title'],
+    //     completed: response.data['completed']);
+    Todos todo = Todos.fromMap(response.data);
+    print(todo);
   } else {
-    print("No");
-  }
-  print(await temp);
-  // Squere firstSquere = Squere(demision: 20);
-  // firstSquere.draw();
-  // // Circle firstCircle = Squere(demision: 2);
-  // Shape shape = Squere(demision: 20);
-
-  // // firstCircle.draw();
-  // print(shape);
-  // shape.draw();
-
-  // ? The rest of Example
-  // echo(creature: Cat());
-  // Traingle traingl = TraingleWith90Angel(edge1: 10, edge2: 15);
-  // print(traingl.toString());
-}
-
-abstract class Shape {
-  draw();
-
-  printer() {
-    print("");
+    print("there is no connection");
   }
 }
 
-class Traingle extends Shape {
-  int edge1;
-  int edge2;
-  int angle;
+getListOfData() async {
+  Response response =
+      await dio.get("https://jsonplaceholder.typicode.com/todos");
+  if (response.statusCode == 200) {
+    // ! convert List of Map to List of Object
+    // List<dynamic> temp = response.data;
+    // List<Todos> todos = [];
+    // for (var element in temp) {
+    //   var data = Todos.fromMap(element);
+    //   todos.add(data);
+    // }
+    // print(todos);
 
-  Traingle({
-    required this.edge1,
-    required this.edge2,
-    required this.angle,
+    // ! convert List of Map to List of Object
+    List<Todos> test = List.generate(
+      response.data.length,
+      (index) => Todos.fromMap(
+        response.data[index],
+      ),
+    );
+
+    print(test);
+  } else {
+    print("there is no connection");
+  }
+}
+
+class Todos {
+  int userId;
+  int id;
+  String title;
+  bool completed;
+  Todos({
+    required this.userId,
+    required this.id,
+    required this.title,
+    required this.completed,
   });
 
-  @override
-  draw() {
-    print("I am a Traingle");
+  Todos copyWith({
+    int? userId,
+    int? id,
+    String? title,
+    bool? completed,
+  }) {
+    return Todos(
+      userId: userId ?? this.userId,
+      id: id ?? this.id,
+      title: title ?? this.title,
+      completed: completed ?? this.completed,
+    );
   }
 
-  // @override
-  // String toString() {
-  //   return 'Traingle(edge1: $edge1, edge2: $edge2, angle: $angle)';
-  // }
-}
-
-class TraingleWith90Angel extends Traingle {
-  TraingleWith90Angel(
-      {required super.edge1, required super.edge2, super.angle = 90});
-
-  @override
-  draw() {
-    print("I am a TRaingle with 90 Angle");
-  }
-}
-
-class Squere extends Shape {
-  int demision;
-
-  Squere({required this.demision});
-
-  @override
-  draw() {
-    print("I am a Squere");
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'userId': userId,
+      'id': id,
+      'title': title,
+      'completed': completed,
+    };
   }
 
-  @override
-  bool operator ==(covariant Squere other) {
-    if (identical(this, other)) return true;
-
-    return other.demision == demision;
+  factory Todos.fromMap(Map<String, dynamic> map) {
+    return Todos(
+      userId: map['userId'] as int,
+      id: map['id'] as int,
+      title: map['title'] as String,
+      completed: map['completed'] as bool,
+    );
   }
 
-  @override
-  int get hashCode => demision.hashCode;
-}
+  String toJson() => json.encode(toMap());
 
-class Circle extends Shape {
-  int radius;
-  Circle({required this.radius});
+  factory Todos.fromJson(String source) =>
+      Todos.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  draw() {
-    print("I am a Circle");
-  }
-}
-// ? Example to See the benefit of Abstract
-// abstract class Animal {}
-
-// class Cat extends Animal {}
-
-// class Dog extends Animal {}
-
-// class Horse extends Animal {}
-
-// echo({required Animal creature}) {
-//   if (creature.runtimeType == Dog) {
-//     print("this is a dog");
-//   } else if (creature.runtimeType == Cat) {
-//     print("this is a cat");
-//   } else {
-//     print("this is a Horse");
-//   }
-// }
-
-abstract class A {
-  hello() {
-    print("object");
-  }
-
-  world();
-}
-
-class B extends A {
-  @override
-  hello() {
-    print("dsajdkljas;d");
-  }
-
-  @override
-  world() {
-    print("world");
+  String toString() {
+    return 'Todos(userId: $userId, id: $id, title: $title, completed: $completed)';
   }
 }
