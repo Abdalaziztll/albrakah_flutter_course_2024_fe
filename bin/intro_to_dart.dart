@@ -2,108 +2,102 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'jwt_token.dart';
 
 main() async {
-  await getHttp();
-  await getListOfData();
+ 
+  await login(
+      user: User(
+          email: "flutter.test99test@gmail.com",
+          password: "fluttertest99test@"));
+
+
+  // await updateData(id: '3', book: BookModel(name: "Hello", price: 0));
+  // await getListData();
+  // await deleteDate(id: '3');
+  // await createData(book: BookModel(name: "name", price: 1000));
+  // await deleteDate(id: '4');
+  // await getOneData(id: '1');
 }
 
-Dio dio = Dio();
-
-getHttp() async {
-  Response response =
-      await dio.get("https://jsonplaceholder.typicode.com/todos/1");
-  if (response.statusCode == 200) {
-    // Todos todo = Todos(
-    //     userId: response.data['userId'],
-    //     id: response.data['id'],
-    //     title: response.data['title'],
-    //     completed: response.data['completed']);
-    Todos todo = Todos.fromMap(response.data);
-    print(todo);
-  } else {
-    print("there is no connection");
-  }
-}
-
-getListOfData() async {
-  Response response =
-      await dio.get("https://jsonplaceholder.typicode.com/todos");
-  if (response.statusCode == 200) {
-    // ! convert List of Map to List of Object
-    // List<dynamic> temp = response.data;
-    // List<Todos> todos = [];
-    // for (var element in temp) {
-    //   var data = Todos.fromMap(element);
-    //   todos.add(data);
-    // }
-    // print(todos);
-
-    // ! convert List of Map to List of Object
-    List<Todos> test = List.generate(
-      response.data.length,
-      (index) => Todos.fromMap(
-        response.data[index],
-      ),
-    );
-
-    print(test);
-  } else {
-    print("there is no connection");
-  }
-}
-
-class Todos {
-  int userId;
-  int id;
-  String title;
-  bool completed;
-  Todos({
-    required this.userId,
-    required this.id,
-    required this.title,
-    required this.completed,
+class BookModel {
+  String name;
+  num price;
+  BookModel({
+    required this.name,
+    required this.price,
   });
 
-  Todos copyWith({
-    int? userId,
-    int? id,
-    String? title,
-    bool? completed,
+  BookModel copyWith({
+    String? name,
+    num? price,
   }) {
-    return Todos(
-      userId: userId ?? this.userId,
-      id: id ?? this.id,
-      title: title ?? this.title,
-      completed: completed ?? this.completed,
+    return BookModel(
+      name: name ?? this.name,
+      price: price ?? this.price,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'userId': userId,
-      'id': id,
-      'title': title,
-      'completed': completed,
+      'name': name,
+      'price': price,
     };
   }
 
-  factory Todos.fromMap(Map<String, dynamic> map) {
-    return Todos(
-      userId: map['userId'] as int,
-      id: map['id'] as int,
-      title: map['title'] as String,
-      completed: map['completed'] as bool,
+  factory BookModel.fromMap(Map<String, dynamic> map) {
+    return BookModel(
+      name: map['name'] as String,
+      price: map['price'] as num,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Todos.fromJson(String source) =>
-      Todos.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory BookModel.fromJson(String source) =>
+      BookModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() {
-    return 'Todos(userId: $userId, id: $id, title: $title, completed: $completed)';
+  String toString() => 'BookModel(name: $name, price: $price)';
+
+  @override
+  bool operator ==(covariant BookModel other) {
+    if (identical(this, other)) return true;
+
+    return other.name == name && other.price == price;
   }
+
+  @override
+  int get hashCode => name.hashCode ^ price.hashCode;
+}
+
+Dio dio = Dio();
+late Response response;
+String baseUrl = "https://662f69f643b6a7dce30f67d5.mockapi.io/book";
+
+getListData() async {
+  response = await dio.get(baseUrl);
+  print(response);
+}
+
+getOneData({String id = '1'}) async {
+  response = await dio.get(baseUrl + '/' + id);
+  print(response);
+}
+
+createData({required BookModel book}) async {
+  response = await dio.post(baseUrl, data: book.toMap());
+  print(response);
+}
+
+updateData({required String id, required BookModel book}) async {
+  response = await dio.put(baseUrl + '/' + id, data: book.toMap());
+  print(response);
+}
+
+deleteDate({required String id}) async {
+  response = await dio.delete(baseUrl + '/' + id);
+  print(response);
 }

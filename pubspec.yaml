@@ -9,6 +9,7 @@ environment:
 # Add regular dependencies here.
 dependencies:
   dio: ^5.4.3+1
+  shared_preferences: ^2.2.3
   # path: ^1.8.0
 
 dev_dependencies:
