@@ -1,24 +1,45 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:widgets_and_onboarding/color/color_palete.dart';
-import 'package:widgets_and_onboarding/style/text_style.dart';
+import 'package:flutter/widgets.dart';
 
 void main() {
+  // Widget offline =const  TestPage();
+  // Widget offline2 =   const TestPage();
+  // if (offline == offline2) {
+  //   print("Matched");
+  // } else {
+  //   print("Not Matched");
+  // }
+
+  TestPageProMax temp = TestPageProMax();
+  TestPageProMax temp1 = TestPageProMax();
+
+  if (temp == temp1) {
+    print("Matched");
+  } else {
+    print("Not Matched");
+  }
+
   runApp(const App());
 }
+
+int counter = 0;
+late double width;
+late double height;
 
 class App extends StatelessWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ResponivePage(),
     );
   }
 }
-
-PageController onBoardingContoller = PageController();
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,168 +47,165 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: onBoardingContoller,
-        // onPageChanged: (value) {
-        //   print(value);
-        // },
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        children: const [
-          OnBoarding(
-              title: "Write Lists",
-              image: 'assets/images/cuate.png',
-              des: "Aliquip eu sint \nsint ullamco commodo.",
-              btnText: "Next",
-              index: 0),
-          OnBoarding(
-              title: "Write Lists",
-              image: 'assets/images/cuate2.png',
-              des: "Ex qui sit in cillum officia.",
-              btnText: "Next",
-              index: 1),
-          OnBoarding(
-              title: "Write Lists",
-              image: 'assets/images/cuate3.png',
-              des:
-                  "Nulla nisi consequat fugiat deserunt qui voluptate anim ullamco ad mollit id aliqua cillum.",
-              btnText: "Let Start",
-              index: 2),
-          Scaffold(
-            backgroundColor: primary,
-          )
+      body: Column(
+        children: [
+          Flexible(
+            flex: 4,
+            child: Container(
+              color: Colors.red,
+              height: 300,
+            ),
+          ),
+          Flexible(
+            flex: 8,
+            child: Container(
+              color: Colors.blue,
+              height: 300,
+            ),
+          ),
+          Flexible(
+            flex: 4,
+            child: Container(
+              color: Colors.yellow,
+              height: 300,
+            ),
+          ),
+          Spacer(
+            flex: 1,
+          ),
+          Flexible(
+            flex: 8,
+            child: Container(
+              color: Colors.green,
+              height: 300,
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-class OnBoarding extends StatelessWidget {
-  const OnBoarding(
-      {super.key,
-      required this.title,
-      required this.image,
-      required this.des,
-      required this.btnText,
-      required this.index});
-
-  final String title;
-  final String image;
-  final String des;
-  final String btnText;
-  final int index;
+class ThidPage extends StatelessWidget {
+  const ThidPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Icon(
-                
-                Icons.skip_next,
-                )
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(shape: BoxShape.circle),
-            clipBehavior: Clip.hardEdge,
-            width: 300,
-            height: 200,
-            child: Image.asset(
-              image,
-            ),
-          ),
-          Text(
-            title,
-            style: headlineTextStyle,
-          ),
-          Text(
-            des,
-            style: subtitleTextStyle,
-          ),
-
-          // SmoothPageIndicator(
-
-          //     controller: onBoardingContoller, // PageController
-          //     count: 4,
-          //     effect: WormEffect(dotColor: secondary,activeDotColor: primary), // your preferred effect
-          //     onDotClicked: (index) {}),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: (index == 0) ? primary : secondary),
-                width: 10,
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: (index == 1) ? primary : secondary),
-                  width: 10,
-                  height: 10,
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: (index == 2) ? primary : secondary),
-                width: 10,
-                height: 10,
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 40.0),
-            child: InkWell(
-              onTap: () {
-                onBoardingContoller.nextPage(
-                    duration: Duration(seconds: 3),
-                    curve: Curves.fastEaseInToSlowEaseOut);
-                // onBoardingContoller.animateToPage(3,
-                //     duration: Duration(seconds: 2), curve: Curves.easeOutCirc);
-              },
-              child: Container(
-                // ? Cover the child with specific decoration
-                // foregroundDecoration: BoxDecoration(
-                //   color: Colors.green,
-                //   shape: BoxShape.circle,
-                // ),
-                alignment: Alignment.center,
-                child: Text(
-                  btnText,
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                ),
-                width: 317,
-                height: 54,
-                decoration: BoxDecoration(
-                  // ? Example For Bad Red Shadow
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.red,
-                  //     blurRadius: 0.5,
-                  //     spreadRadius: 1,
-                  //     blurStyle: BlurStyle.normal,
-                  //     offset: Offset(-10, 10),
-                  //   )
-                  // ],
-                  borderRadius: BorderRadius.circular(20),
-                  color: primary,
-                ),
-              ),
-            ),
-          )
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 400 && constraints.maxHeight > 800) {
+            return Container(
+              color: Colors.red,
+            );
+          } else {
+            return Container(
+              color: Colors.blue,
+            );
+          }
+        },
       ),
     );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  const SecondPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              );
+            },
+            child: Icon(Icons.home)),
+      ),
+      body: Center(
+        child: InkWell(
+          onTap: () {
+            counter++;
+            print(counter);
+          },
+          child: Icon(Icons.add),
+        ),
+      ),
+    );
+  }
+}
+
+class ResponivePage extends StatelessWidget {
+  const ResponivePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TestPageProMax(),
+                ));
+          },
+          child: Container(
+            width: width * 0.5,
+            height: height * 0.5,
+            color: Colors.blue,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// class TestPage extends StatelessWidget {
+//   const TestPage({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(),
+//       body: Center(
+//         child: InkWell(
+//           onTap: () {
+//             Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                   builder: (context) => ResponivePage(),
+//                 ));
+//           },
+//           child: Container(
+//             child: Center(child: Text("Offline ")),
+//             width: width * 0.5,
+//             height: height * 0.5,
+//             color: Colors.red,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+class TestPageProMax extends StatelessWidget {
+  TestPageProMax._Internal();
+
+  static final ui = TestPageProMax._Internal();
+
+  factory TestPageProMax() {
+    return ui;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
