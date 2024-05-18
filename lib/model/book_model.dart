@@ -50,7 +50,7 @@ class BookModel {
       cover_image: map['cover_image'] as String,
     );
   }
-
+  
   String toJson() => json.encode(toMap());
 
   factory BookModel.fromJson(String source) => BookModel.fromMap(json.decode(source) as Map<String, dynamic>);
